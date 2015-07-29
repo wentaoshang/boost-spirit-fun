@@ -1,7 +1,5 @@
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
-#include <boost/spirit/include/phoenix_core.hpp>
-#include <boost/spirit/include/phoenix_operator.hpp>
 
 #include <iostream>
 #include <string>
@@ -20,9 +18,7 @@ namespace client
   {
     using qi::double_;
     using qi::phrase_parse;
-    using qi::_1;
     using ascii::space;
-    using boost::phoenix::ref;
 
     auto init = [](const double& n) { sum = n; };  // no need to capture sum since it's global
     auto add = [](const double& n) { sum += n; };
