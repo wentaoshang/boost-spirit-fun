@@ -31,11 +31,20 @@ namespace client
     auto init_store = [&](const double& n) { init(n); store(n); };
     auto add_store = [&](const double& n) { add(n); store(n); };
 
+    /*
     bool r = phrase_parse(first, last,
 			  // Begin grammar
 			  double_[init_store] >> *(',' >> double_[add_store]),
 			  // End grammar
 			  space);
+    */
+
+    // Equivalent to the above code (using attribute)
+    bool r = phrase_parse(first, last,
+			  double_[init] >> *(',' >> double_[add]),
+			  space,
+			  v);
+
     if (!r || first != last) // fail if we did not get a full match
       return false;
 
