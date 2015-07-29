@@ -8,12 +8,14 @@ def configure(conf):
         conf.load('compiler_cxx boost')
         conf.check_boost(lib='system')
 
+        # Enable C++14 for all builds
+        conf.env.append_value('CXXFLAGS', ['-O2',
+                                           '-std=c++14',
+                                           '-std=c++1y',
+                                           '-g'])
+
 def build(bld):
-        bld.program(target = 'num-adder',
-                    source = bld.path.ant_glob('num_adder/*.cpp'),
-                    includes = 'num_adder/',
-                    use = 'BOOST',
-                    cxxflags = ['-O2',
-                                '-std=c++14',
-                                '-std=c++1y',
-                                '-g'])
+        bld.program(target = 'num_adder',
+                    source = bld.path.ant_glob('num-adder/*.cpp'),
+                    includes = 'num-adder/',
+                    use = 'BOOST')
