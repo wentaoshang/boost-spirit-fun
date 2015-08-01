@@ -1,4 +1,3 @@
-#include <boost/any.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/fusion/include/std_pair.hpp>
 #include <boost/variant/recursive_variant.hpp>
@@ -12,7 +11,7 @@ namespace json {
 
   typedef boost::variant<boost::recursive_wrapper<object_t>,
 			 boost::recursive_wrapper<array_t>,
-			 std::string, void*, double, bool> value_t;
+			 std::string, std::nullptr_t, double, bool> value_t;
 
   typedef std::pair<std::string, value_t> pair_t;
   
@@ -69,7 +68,7 @@ namespace json {
       std::cout << '"' << str << '"';
     }
 
-    void operator()(const void*& ptr) const {
+    void operator()(const std::nullptr_t& ptr) const {
       tab(indent);
       std::cout << "null";
     }
@@ -102,7 +101,7 @@ namespace json {
   namespace qi = boost::spirit::qi;
   namespace ascii = boost::spirit::ascii;
 
-  struct null_symbol : qi::symbols<char, void*>
+  struct null_symbol : qi::symbols<char, std::nullptr_t>
   {
     null_symbol() {
       add("null", nullptr);
@@ -110,9 +109,9 @@ namespace json {
   } null_;
 
   template <typename Iterator>
-  struct Grammar : qi::grammar<Iterator, value_t(), ascii::space_type>
+  struct grammar_ : qi::grammar<Iterator, value_t(), ascii::space_type>
   {
-    Grammar(): Grammar::base_type(start) {
+    grammar_(): grammar_::base_type(start) {
       using qi::lexeme;
       using qi::double_;
       using qi::bool_;
@@ -139,7 +138,7 @@ namespace json {
 int main() {
   const std::string source = "[ null, 3.14159, false, {\"key\" : \"value\", \"one\" : 1} ]";
 
-  json::Grammar<std::string::const_iterator> g;
+  json::grammar_<std::string::const_iterator> g;
   json::value_t v;
 
   auto first = source.begin();
