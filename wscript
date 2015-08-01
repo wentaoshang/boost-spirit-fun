@@ -19,3 +19,8 @@ def build(bld):
                     source = bld.path.ant_glob('num-adder/*.cpp'),
                     includes = 'num-adder/',
                     use = 'BOOST')
+
+        bld.program(target = 'mini_json',
+                    source = bld.path.ant_glob('mini-json/*.cpp'),
+                    includes = 'mini-json/',
+                    use = 'BOOST')
